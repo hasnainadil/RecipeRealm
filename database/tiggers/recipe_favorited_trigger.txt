@@ -1,0 +1,21 @@
+CREATE OR REPLACE TRIGGER recipe_favorited_trigger
+AFTER INSERT ON Favourite
+FOR EACH ROW
+DECLARE
+    v_creator_id NUMBER(10);
+    v_recipe_name VARCHAR2(80 CHAR);
+    v_favoriting_user_name VARCHAR2(60 CHAR);
+    v_notification_message VARCHAR2(255 CHAR);
+BEGIN
+    SELECT user_id INTO v_creator_id FROM Recipes WHERE recipe_id = :new.recipe_id;
+
+    SELECT title INTO v_recipe_name FROM Recipes WHERE recipe_id = :new.recipe_id;
+
+    SELECT (first_name || ' ' || last_name) INTO v_favoriting_user_name FROM Users WHERE user_id = :new.user_id;
+
+    v_notification_message := 'Congratulations! ' || v_favoriting_user_name || ' has added your "' || v_recipe_name || '" recipe to their favorites.';
+
+    INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+    VALUES (v_creator_id, v_notification_message,'recipe',:new.recipe_id);
+END;
+/

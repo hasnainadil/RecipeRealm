@@ -1,0 +1,18 @@
+CREATE OR REPLACE TRIGGER new_user_welcome_trigger
+AFTER INSERT ON Users
+FOR EACH ROW
+DECLARE
+    v_new_user_id NUMBER(10);
+    v_new_user_name VARCHAR2(60 CHAR);
+    v_welcome_message VARCHAR2(255 CHAR);
+BEGIN
+    v_new_user_id := :new.user_id;
+
+    v_new_user_name := :new.first_name || ' ' || :new.last_name;
+
+    v_welcome_message := 'We welcome our new member ' || v_new_user_name || ' to the realm of recipes.';
+
+    INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+    VALUES (v_new_user_id, v_welcome_message,'welcome',NULL);
+END;
+/

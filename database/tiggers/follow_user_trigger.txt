@@ -1,0 +1,25 @@
+CREATE OR REPLACE TRIGGER follow_user_trigger
+AFTER INSERT ON follow
+FOR EACH ROW
+DECLARE
+    v_following_user_name users.first_name%TYPE;
+    v_followed_user_name users.first_name%TYPE;
+    v_message VARCHAR2(255 CHAR);
+BEGIN
+    -- Get the user names of the following and followed users
+    SELECT first_name INTO v_following_user_name
+    FROM users
+    WHERE user_id = :new.user_id;
+
+    SELECT first_name INTO v_followed_user_name
+    FROM users
+    WHERE user_id = :new.following_id;
+
+    -- Create a notification message
+    v_message := 'User ' || v_following_user_name || ' is now following you.';
+
+    -- Insert a new notification for the followed user
+    INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+    VALUES (:new.following_id, v_message,'profile',:new.USER_ID);
+END;
+/

@@ -1,0 +1,85 @@
+/* signup.module.css */
+
+/* Background and container */
+.signupBackground {
+    background-color: #f0f0f0;
+  }
+  
+  .container {
+    max-width: 1140px;
+  }
+  
+  /* Card */
+  .card {
+    background-color: #fff;
+    border-radius: 1.5rem;
+  }
+  
+  .card-body {
+    padding: 2rem;
+  }
+  
+  /* Form */
+  .form-outline {
+    position: relative;
+  }
+  
+  .form-label {
+    position: absolute;
+    top: 0.75rem;
+    left: 1.5rem;
+    color: #6c757d;
+    pointer-events: none;
+    transition: top 0.2s ease, left 0.2s ease, font-size 0.2s ease;
+  }
+  
+  .form-control {
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .form-control:focus {
+    border-color: #4c75f2;
+    box-shadow: 0 0 0 0.25rem rgba(76, 117, 242, 0.25);
+  }
+  
+  /* Checkbox */
+  .form-check-input {
+    margin-right: 0.5rem;
+  }
+  
+  /* Button */
+  .btn-primary {
+    background-color: #4c75f2;
+    border-color: #4c75f2;
+    border-radius: 0.5rem;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #355ed3;
+    border-color: #355ed3;
+  }
+  
+  /* Image */
+  .signupImage {
+    max-width: 100%;
+    height: auto;
+    border-top-right-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
+  }
+  
+  /* Links */
+  .text-blue-500 {
+    color: #4c75f2;
+  }
+  
+  .text-blue-500:hover {
+    color: #355ed3;
+  }
+  

@@ -1,0 +1,5 @@
+CREATE SEQUENCE RecipeSeq
+    START WITH 401  -- Set the starting value to 401 since you already have 400 recipes inserted
+    INCREMENT BY 1
+    NOCACHE
+    NOCYCLE;

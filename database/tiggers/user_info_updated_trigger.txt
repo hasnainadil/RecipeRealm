@@ -1,0 +1,25 @@
+CREATE OR REPLACE TRIGGER user_info_updated_trigger
+AFTER UPDATE ON Users
+FOR EACH ROW
+DECLARE
+    v_user_id NUMBER(10);
+    v_notification_message VARCHAR2(255 CHAR);
+BEGIN
+    -- Get the user ID of the updated user
+    v_user_id := :new.user_id;
+
+    -- Check if relevant columns have been updated
+    IF :new.first_name != :old.first_name OR
+       :new.last_name != :old.last_name OR
+       :new.email_address != :old.email_address OR
+       :new.profile_picture != :old.profile_picture THEN
+       
+        -- Create the notification message
+        v_notification_message := 'Your account information got updated.';
+
+        -- Insert the notification message into the notifications table
+        INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+        VALUES (v_user_id, v_notification_message,NULL,NULL);
+    END IF;
+END;
+/

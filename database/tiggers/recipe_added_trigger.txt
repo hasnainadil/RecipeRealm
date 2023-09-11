@@ -1,0 +1,25 @@
+CREATE OR REPLACE TRIGGER recipe_added_trigger
+AFTER INSERT ON Recipes
+FOR EACH ROW
+DECLARE
+    v_recipe_creator_id NUMBER(10);
+    v_recipe_creator_name users.first_name%TYPE;
+    v_message VARCHAR2(255 CHAR);
+BEGIN
+    v_recipe_creator_id := :new.user_id;
+
+    SELECT first_name INTO v_recipe_creator_name
+    FROM users
+    WHERE user_id = v_recipe_creator_id;
+
+    v_message := v_recipe_creator_name || ' added a new recipe named ' || :new.title || '.';
+
+    FOR follower_rec IN (SELECT DISTINCT user_id
+                         FROM follow
+                         WHERE following_id = v_recipe_creator_id)
+    LOOP
+        INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+        VALUES (follower_rec.user_id, v_message,'recipe',:new.RECIPE_ID);
+    END LOOP;
+END;
+/

@@ -1,0 +1,27 @@
+CREATE OR REPLACE PROCEDURE EditProfile(
+    p_user_id IN NUMBER,
+    p_first_name IN VARCHAR2,
+    p_last_name IN VARCHAR2,
+    p_email_address IN VARCHAR2,
+		p_old_password IN VARCHAR2,
+    p_password IN VARCHAR2
+) AS
+hashed_prev VARCHAR2(100);
+BEGIN
+		
+    -- Check if the user exists
+    SELECT PASSWORD INTO hashed_prev FROM USERS WHERE USER_ID = p_user_id; --GET THE PASS FROM TABLE
+    -- Update user profile fields;
+		IF dbms_crypto.hash (utl_i18n.string_to_raw (p_old_password, 'AL32UTF8'), dbms_crypto.hash_sh1) = hashed_prev THEN
+			UPDATE Users
+			SET
+					first_name = p_first_name,
+					last_name = p_last_name,
+					email_address = p_email_address,
+				word = p_password
+			WHERE user_id = p_user_id;
+		ELSE
+			RAISE_APPLICATION_ERROR(-20001, 'UPDATE FAILED');
+		END IF;
+    
+END;

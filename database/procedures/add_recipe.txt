@@ -1,0 +1,31 @@
+CREATE OR REPLACE PROCEDURE AddRecipe(
+    p_title IN VARCHAR2,
+    p_cooking_instruction IN VARCHAR2,
+    p_preparation_time IN NUMBER,
+    p_cooking_time IN NUMBER,
+    p_user_id IN NUMBER
+) AS
+BEGIN
+    INSERT INTO Recipes (
+        recipe_id,
+        title,
+        cooking_instruction,
+        preparation_time,
+        cooking_time,
+        user_id,
+        creation_date
+    ) VALUES (
+        RecipeSeq.nextval, -- Assuming you have a sequence named RecipeSeq
+        p_title,
+        p_cooking_instruction,
+        p_preparation_time,
+        p_cooking_time,
+        p_user_id,
+        SYSDATE
+    );
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        -- Handle exceptions (e.g., raise or log an error)
+        RAISE;
+END AddRecipe;

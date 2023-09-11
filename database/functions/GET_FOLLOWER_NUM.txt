@@ -1,0 +1,11 @@
+CREATE OR REPLACE FUNCTION "GET_FOLLOWER_NUM"(id in NUMBER) RETURN NUMBER
+AS
+follower_num NUMBER(10);
+BEGIN
+SELECT count(*) into follower_num
+FROM FOLLOW
+WHERE USER_ID = id;
+	-- routine body goes here, e.g.
+	-- DBMS_OUTPUT.PUT_LINE('Navicat for Oracle');
+	RETURN follower_num;
+END;

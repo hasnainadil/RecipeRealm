@@ -1,0 +1,30 @@
+CREATE OR REPLACE TRIGGER REVIEW_ADDED
+AFTER INSERT 
+ON REVIEWS
+FOR EACH ROW 
+DECLARE
+    v_creator_id NUMBER(10);
+    v_recipe_title VARCHAR2(80 CHAR);
+    v_reviewer_name VARCHAR2(60 CHAR);
+    v_review_rate NUMBER(1);
+    v_notification_message VARCHAR2(255 CHAR);
+BEGIN
+    -- Get the ID of the user who created the recipe
+    SELECT user_id INTO v_creator_id FROM Recipes WHERE recipe_id = :new.recipe_id;
+
+    -- Get the title of the recipe
+    SELECT title INTO v_recipe_title FROM Recipes WHERE recipe_id = :new.recipe_id;
+
+    -- Get the full name of the user who left the review
+    SELECT first_name || ' ' || last_name INTO v_reviewer_name FROM Users WHERE user_id = :new.user_id;
+
+    -- Get the review rating
+     v_review_rate := :new.RATING;
+
+    -- Create the notification message
+    v_notification_message := v_reviewer_name || ' rated your recipe "' || v_recipe_title || '" ' || v_review_rate || ' stars.';
+
+    -- Insert the notification message into the notifications table for the recipe creator
+    INSERT INTO notifications (user_id, message,NOTIFICATION_TYPE,R_U_ID)
+    VALUES (v_creator_id, v_notification_message,'recipe',:new.recipe_id);
+END;
